@@ -2,34 +2,177 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#5B8A86"
+    android:onClick="onClick_newPlaylist"
     tools:context=".MainActivity">
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/ImageViewPlayButton"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="51dp"
+        android:layout_height="49dp"
 
-        android:layout_marginEnd="16dp"
-
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="15dp"
         android:baselineAlignBottom="false"
         android:contentDescription="@+string/Play Buttom"
-        android:onClick="onClick"
+        android:onClick="onClick_playStop"
         android:src="@drawable/ic_play"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/showPlaylist"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+
+    <Button
+        android:id="@+id/showPlaylist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="127dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="15dp"
+        android:backgroundTint="#009688"
+        android:onClick="onClick_showPlaylist"
+        android:text="@string/show_playlists"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ImageViewPlayButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="52dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="292dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="15dp"
+        android:contentDescription="@+string/New Playlist Button"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_newplaylist" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="358dp"
+        android:layout_height="480dp"
+        android:background="#EBECE8"
+        android:paddingBottom="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/onTopLayout"
+        android:layout_width="300dp"
+        android:layout_height="170dp"
+        android:background="#C4C5C4"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.327"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/newPlaylistTitle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="30dp"
+            android:ems="10"
+            android:text="@string/nueva_playlist"
+            android:textAlignment="center"
+            android:textSize="36sp"
+            app:layout_constraintBottom_toTopOf="@+id/newPlaylistNameTitle"
+            app:layout_constraintEnd_toStartOf="@+id/closeNewPlaylist"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/newPlaylistNameTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="9dp"
+            android:text="@string/nombre"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/isPublicRadioButton"
+            app:layout_constraintEnd_toStartOf="@+id/editTextPlaylistName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/newPlaylistTitle" />
+
+        <EditText
+            android:id="@+id/editTextPlaylistName"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="16dp"
+            android:autofillHints="@string/nombre_de_la_playlist"
+            android:backgroundTint="#425E23"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@string/nombre_de_la_playlist"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@+id/createPlaylist"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/newPlaylistNameTitle"
+            app:layout_constraintTop_toBottomOf="@+id/closeNewPlaylist" />
+
+        <CheckBox
+            android:id="@+id/isPublicRadioButton"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="22dp"
+            android:layout_marginBottom="17dp"
+            android:checked="false"
+            android:text="@string/publica"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/createPlaylist"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/newPlaylistNameTitle" />
+
+        <Button
+            android:id="@+id/createPlaylist"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="15dp"
+            android:backgroundTint="#4CAF50"
+            android:onClick="onClick_createNewPlaylist"
+            android:text="@string/crear"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/isPublicRadioButton"
+            app:layout_constraintTop_toBottomOf="@+id/editTextPlaylistName" />
+
+        <ImageButton
+            android:id="@+id/closeNewPlaylist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="#F44336"
+            android:onClick="onClick_closeNewPlaylist"
+            app:layout_constraintBottom_toTopOf="@+id/editTextPlaylistName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/newPlaylistTitle"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_close" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
