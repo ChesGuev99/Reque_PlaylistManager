@@ -1,5 +1,16 @@
 package com.example.playlistmanager;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,49 +27,33 @@ import com.example.playlistmanager.services.SpotifyDataService;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
-
+import com.spotify.protocol.types.PlayerState;
 import com.spotify.protocol.types.Track;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.text.Layout;
-import android.util.Log;
-import android.view.View;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.Toast;
-
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
-
 //https://developer.spotify.com/documentation/android/guides/android-authentication/#adding-the-library-to-the-project
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String CLIENT_ID = "05684c1d384d45c2b5ef557e0dfe11b3";
+    private static final String CLIENT_ID = "7fa76e79855a45d79846fee149745c0e";
     private static final String REDIRECT_URI = "http://com.yourdomain.yourapp/callback";
     private SpotifyAppRemote mSpotifyAppRemote;
     private static final int REQUEST_CODE = 1337;
     private String TOKEN;
     private String userID = "";
     Boolean isUser = false;
-
+    static SeekBar simpleProgressBar;
+    static int progreso = 0;
 
     //Spotify client autorization
     private void authorization(){
@@ -145,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private Boolean isPaused = null;
+    private Boolean isPaused = false;
 
 
     @Override
@@ -171,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onConnected(SpotifyAppRemote spotifyAppRemote) {
                         progressDoalog.dismiss();
                         mSpotifyAppRemote = spotifyAppRemote;
-                        Log.d("prueba MainActivity", "Connected! Yay!");
+                        Log.d("MainActivity", "Connected! Yay!");
 
                         // Now you can start interacting with App Remote
                         connected();
@@ -189,27 +184,93 @@ public class MainActivity extends AppCompatActivity {
 
     // On successful Spotify connection
     private void connected() {
-        // Then we will write some more code here.
-        // Play a playlist
-        mSpotifyAppRemote.getPlayerApi().play("spotify:playlist:21NfJpz1f2rFl0D1qlS5dG");
+
+        mSpotifyAppRemote.getPlayerApi().play("spotify:playlist:6jdrY2JQvvxbT0bjxUwp5M");
         // Subscribe to PlayerState
+
+        simpleProgressBar = (SeekBar) findViewById(R.id.simpleProgressBar);
+        setProgressValue();
+
         mSpotifyAppRemote.getPlayerApi()
                 .subscribeToPlayerState()
                 .setEventCallback(playerState -> {
                     Log.d("prueba", "siPaused" + playerState.isPaused);
                     final Track track = playerState.track;
                     if (track != null) {
+
                         isPaused = playerState.isPaused;
+
+
+                        simpleProgressBar.setMax((int)playerState.track.duration);
+                        simpleProgressBar.setOnSeekBarChangeListener(
+                                new SeekBar.OnSeekBarChangeListener() {
+                                    int progressChangedValue = 0;
+                                    //hace un llamado a la perilla cuando se arrastra
+                                    @Override
+                                    public void onProgressChanged(SeekBar seekBar,
+                                                                  int progress, boolean fromUser) {
+                                        progressChangedValue = progress;
+
+                                    }
+
+                                    //hace un llamado  cuando se toca la perilla
+                                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                                    }
+
+                                    //hace un llamado  cuando se detiene la perilla
+                                    public void onStopTrackingTouch(SeekBar seekBar) {
+                                        //thread.interrupt();
+                                        progreso = progressChangedValue;
+                                        //progressChangedValue = 0;
+                                        mSpotifyAppRemote.getPlayerApi().seekTo(progreso);
+
+
+                                    }
+
+                                });
+
+
                         //Log.d("Test", track.name + " by " + track.artist.name);
                     }
                     ImageView buttonImage = (ImageView)findViewById(R.id.ImageViewPlayButton);
                     if (isPaused){
                         buttonImage.setImageResource(R.drawable.ic_play);
+
                     }
                     else{
                         buttonImage.setImageResource(R.drawable.ic_pause);
                     }
                 });
+    }
+
+
+    private void setProgressValue()  {
+        if(progreso==simpleProgressBar.getMax()){
+            progreso = 0;
+
+        }
+        if(!isPaused) {
+        simpleProgressBar.setProgress(progreso);
+        progreso += 1000;
+        }
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Log.d("MainActivity", progreso + "");
+                setProgressValue();
+
+
+            }
+
+        });
+        thread.start();
     }
 
     @Override
