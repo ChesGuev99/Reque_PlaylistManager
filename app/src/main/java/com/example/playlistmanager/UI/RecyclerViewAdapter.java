@@ -14,22 +14,27 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.playlistmanager.R;
 import com.example.playlistmanager.models.Playlist;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter{
     private List<Playlist> itemClassList;
 
     // public constructor for this class
-    public RecyclerViewAdapter(List<Playlist> itemClassList)
+    public RecyclerViewAdapter()
     {
+        this.itemClassList = new ArrayList<Playlist>() {};
+    }
 
-        this.itemClassList = itemClassList;
+    public void updateAdapter(ArrayList<Playlist> newPlaylist){
+        this.itemClassList = newPlaylist;
+        notifyDataSetChanged();
     }
 
 
     // Create classes for each layout ViewHolder.
 
-    class LayoutTwoViewHolder
+    public class LayoutTwoViewHolder
             extends RecyclerView.ViewHolder {
 
         private ImageView icon;
@@ -87,7 +92,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter{
 
     @Override
     public int getItemCount() {
-        return 0;
+        return itemClassList.size();
     }
 
 }

@@ -25,6 +25,7 @@ import com.spotify.sdk.android.auth.AuthorizationResponse;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Layout;
@@ -38,6 +39,7 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private String TOKEN;
     private String userID = "";
     Boolean isUser = false;
+    RecyclerViewAdapter adapterClass = new RecyclerViewAdapter();
 
 
     //Spotify client autorization
@@ -93,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("prueba TOKEN RESPONSE: Tengo un tokeeeen:   " + response.getAccessToken());
                     TOKEN = response.getAccessToken();
                     getUser();
-                    getAllUserPlaylists();
                     spotifyConnect();
 
 
@@ -118,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         authorization();
+        recylerViewStart();
     }
 
     public void recylerViewStart(){
@@ -130,17 +133,29 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapterClass);
+    }
 
-        List<Playlist> itemClasses = userPlaylists;
+    public void updateRecyclerView(){
 
-        RecyclerViewAdapter adapterClass
-                = new RecyclerViewAdapter(itemClasses);
+        ArrayList<Playlist> itemClasses = new ArrayList<Playlist>();
+        for (Playlist playlist: userPlaylists) {
+            System.out.println("prueba playlistRecycler: " + playlist.getName());
+            if (playlist.getOwner().getId() != null){
+                if(playlist.getOwner().getId().equals(userID)){
+                    itemClasses.add(playlist);
+                }
+                else{
+                    if (playlist.getCollaborative() != null) {
+                        if (playlist.getCollaborative()) {
+                            itemClasses.add(playlist);
+                        }
+                    }
+                }
+            }
+        }
+        adapterClass.updateAdapter(itemClasses);
 
-        RecyclerViewAdapter adapter
-                = new RecyclerViewAdapter(itemClasses);
-
-        // set the adapter
-        recyclerView.setAdapter(adapter);
     }
 
 
@@ -265,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
                 if(response.body()!=null){
                     userPlaylists = response.body().getItems();
                     System.out.println(response.body().getItems().get(0).getName());
-                    recylerViewStart();
+                    updateRecyclerView();
                 } else {
                     if(response.errorBody()!=null){
                         try {
@@ -341,6 +356,7 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println(response.body().getId());
                     userID = response.body().getId();
                     isUser = true;
+                    getAllUserPlaylists();
                 } else {
                     if(response.errorBody()!=null){
                         try {

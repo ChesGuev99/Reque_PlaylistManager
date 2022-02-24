@@ -1,5 +1,7 @@
 package com.example.playlistmanager.models;
 
+import java.util.List;
+
 public class User {
     private String country;
     private String displayName;

@@ -13,11 +13,11 @@ public class Playlist {
     private String id;
     private List<String> imgs; // TODO: CHANGE TYPE ADD
     private String name;
-    // owner
+    private User owner;
     private Boolean isPublic;
     private String snapshot_id;
 
-    public Playlist(Boolean isCollaborative, String description, String href, String id, List<String> imgs, String name, Boolean isPublic, String snapshot_id) {
+    public Playlist(Boolean isCollaborative, String description, String href, String id, List<String> imgs, String name, Boolean isPublic, String snapshot_id, User owner) {
         this.isCollaborative = isCollaborative;
         this.description = description;
         this.href = href;
@@ -26,6 +26,7 @@ public class Playlist {
         this.name = name;
         this.isPublic = isPublic;
         this.snapshot_id = snapshot_id;
+        this.owner = owner;
     }
 
     public Playlist(String name){
@@ -33,6 +34,14 @@ public class Playlist {
         this.isCollaborative = false;
         this.description = "";
         this.isPublic = false;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     public Boolean getCollaborative() {
