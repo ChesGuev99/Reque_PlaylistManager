@@ -14,8 +14,6 @@
         android:layout_width="51dp"
         android:layout_height="49dp"
 
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="9dp"
         android:layout_marginBottom="15dp"
         android:baselineAlignBottom="false"
@@ -23,22 +21,7 @@
         android:onClick="onClick_playStop"
         android:src="@drawable/ic_play"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/showPlaylist" />
-
-    <Button
-        android:id="@+id/showPlaylist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="125dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="15dp"
-        android:backgroundTint="#009688"
-        android:onClick="onClick_showPlaylist"
-        android:text="@string/show_playlists"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/ImageViewPlayButton"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -53,15 +36,17 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="411dp"
+        android:layout_height="578dp"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="17dp"
         android:background="#EBECE8"
-        app:layout_constraintBottom_toTopOf="@+id/showPlaylist"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/onTopLayout"
@@ -171,16 +156,14 @@
     <SeekBar
         android:id="@+id/simpleProgressBar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="405dp"
-        android:layout_height="16dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="33dp"
+        android:layout_width="336dp"
+        android:layout_height="18dp"
         android:layout_marginEnd="2dp"
-        android:layout_marginBottom="28dp"
+        android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ImageViewPlayButton" />
+        app:layout_constraintEnd_toStartOf="@+id/ImageViewPlayButton"
+        app:layout_constraintHorizontal_bias="0.538"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
