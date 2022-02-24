@@ -486,17 +486,19 @@ public class MainActivity extends AppCompatActivity {
         onClick_closeNewPlaylist(view);
     }
 
-    public void search(String searching){
+    public void search(View view){
         //searching = searching.replaceAll(" ", "%20");
+        EditText searching = (EditText)findViewById(R.id.editTextSearch);
         System.out.println("prueba palabra busqueda :" + searching);
         SpotifyDataService service = RetrofitSpotifyClient.getRetrofitInstance().create(SpotifyDataService.class);
-        Call<TrackSearch> call = service.search(searching,"track", 20,0,"Bearer "+ TOKEN);
+        Call<TrackSearch> call = service.search(searching.getText().toString(),"track", 20,0,"Bearer "+ TOKEN);
         call.enqueue(new Callback<TrackSearch>() {
             @Override
             public void onResponse(Call<TrackSearch> call, Response<TrackSearch> response) {
-                System.out.println("prueba busqueda :" + response.body());
+                System.out.println("prueba busqueda texedit:" + searching);
                 if(response.body()!=null){
                     System.out.println("prueba busqueda :" +response.body().getItems().getItems().get(0).getName());
+
                 } else {
                     if(response.errorBody()!=null){
                         try {

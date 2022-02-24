@@ -66,20 +66,28 @@
         android:id="@+id/editTextSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Name"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="20dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/imageButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="57dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="16dp"
+        android:adjustViewBounds="true"
         android:backgroundTint="#00FFFFFF"
-        app:srcCompat="@drawable/ic_search"
-        tools:layout_editor_absoluteX="226dp"
-        tools:layout_editor_absoluteY="22dp" />
+        android:onClick="search"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toStartOf="@+id/back"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/editTextSearch"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_search" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
