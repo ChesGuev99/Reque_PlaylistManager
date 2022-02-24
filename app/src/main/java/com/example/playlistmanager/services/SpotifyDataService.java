@@ -1,6 +1,7 @@
 package com.example.playlistmanager.services;
 
 import com.example.playlistmanager.models.AddSongResponse;
+import com.example.playlistmanager.models.GetPlaylistTracks;
 import com.example.playlistmanager.models.Playlist;
 import com.example.playlistmanager.models.PlaylistPost;
 import com.example.playlistmanager.models.Track;
@@ -53,6 +54,18 @@ public interface SpotifyDataService {
              @Query("limit") int lim,
              @Query("offset") int offs,
              @Header("Authorization") String token);
+
+    //GET PLAYLIST TRACKS
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @GET("/v1/playlists/{playlist_id}/tracks")
+    Call<GetPlaylistTracks> getPlaylistSongs(
+         @Path("playlist_id") String playlist_id,
+         @Query("limit") int lim,
+         @Query("offset") int offs,
+         @Header("Authorization") String token);
 
     //POST PLAYLIST
     @Headers({

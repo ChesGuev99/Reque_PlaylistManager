@@ -24,7 +24,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/back"
         android:layout_width="52dp"
         android:layout_height="49dp"
         android:layout_marginTop="16dp"
@@ -45,113 +45,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/back"
         app:layout_constraintVertical_bias="0.0" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/onTopLayout"
-        android:layout_width="300dp"
-        android:layout_height="170dp"
-        android:background="#C4C5C4"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.327"
-        tools:visibility="visible">
-
-        <TextView
-            android:id="@+id/newPlaylistTitle"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginBottom="30dp"
-            android:ems="10"
-            android:text="@string/nueva_playlist"
-            android:textAlignment="center"
-            android:textSize="36sp"
-            app:layout_constraintBottom_toTopOf="@+id/newPlaylistNameTitle"
-            app:layout_constraintEnd_toStartOf="@+id/closeNewPlaylist"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/newPlaylistNameTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="9dp"
-            android:text="@string/nombre"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/isPublicRadioButton"
-            app:layout_constraintEnd_toStartOf="@+id/editTextPlaylistName"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newPlaylistTitle" />
-
-        <EditText
-            android:id="@+id/editTextPlaylistName"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginEnd="16dp"
-            android:autofillHints="@string/nombre_de_la_playlist"
-            android:backgroundTint="#425E23"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="@string/nombre_de_la_playlist"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toTopOf="@+id/createPlaylist"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/newPlaylistNameTitle"
-            app:layout_constraintTop_toBottomOf="@+id/closeNewPlaylist" />
-
-        <CheckBox
-            android:id="@+id/isPublicRadioButton"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="22dp"
-            android:layout_marginBottom="17dp"
-            android:checked="false"
-            android:text="@string/publica"
-            android:textAlignment="center"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/createPlaylist"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newPlaylistNameTitle" />
-
-        <Button
-            android:id="@+id/createPlaylist"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="15dp"
-            android:backgroundTint="#4CAF50"
-            android:onClick="onClick_createNewPlaylist"
-            android:text="@string/crear"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/isPublicRadioButton"
-            app:layout_constraintTop_toBottomOf="@+id/editTextPlaylistName" />
-
-        <ImageButton
-            android:id="@+id/closeNewPlaylist"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:layout_marginBottom="24dp"
-            android:backgroundTint="#F44336"
-            android:onClick="onClick_closeNewPlaylist"
-            app:layout_constraintBottom_toTopOf="@+id/editTextPlaylistName"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/newPlaylistTitle"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_close" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <include layout="@layout/new_playlist_layout" />
 
     <SeekBar
         android:id="@+id/simpleProgressBar"
@@ -164,6 +61,25 @@
         app:layout_constraintEnd_toStartOf="@+id/ImageViewPlayButton"
         app:layout_constraintHorizontal_bias="0.538"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="20dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#00FFFFFF"
+        app:srcCompat="@drawable/ic_search"
+        tools:layout_editor_absoluteX="226dp"
+        tools:layout_editor_absoluteY="22dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

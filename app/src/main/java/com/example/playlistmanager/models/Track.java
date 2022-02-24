@@ -13,6 +13,14 @@ public class Track {
     private long duration_ms;
     private List<Artist> artists;
 
+    public List<Artist> getArtists() {
+        return artists;
+    }
+
+    public void setArtists(List<Artist> artists) {
+        this.artists = artists;
+    }
+
     public Track(String href, String id, String name, String preview_url, int track_number, String type, String uri, long duration_ms) {
         this.href = href;
         this.id = id;

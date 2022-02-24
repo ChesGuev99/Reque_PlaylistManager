@@ -17,9 +17,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.playlistmanager.UI.RecyclerViewAdapter;
+import com.example.playlistmanager.UI.songsRecyclerViewAdapter;
 import com.example.playlistmanager.models.AddSongResponse;
+import com.example.playlistmanager.models.GetPlaylistTracks;
 import com.example.playlistmanager.models.Playlist;
 import com.example.playlistmanager.models.PlaylistPost;
+import com.example.playlistmanager.models.PlaylistTracks;
 import com.example.playlistmanager.models.TrackSearch;
 import com.example.playlistmanager.models.User;
 import com.example.playlistmanager.models.UserPlaylistResponse;
@@ -27,7 +30,6 @@ import com.example.playlistmanager.services.SpotifyDataService;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
-import com.spotify.protocol.types.PlayerState;
 import com.spotify.protocol.types.Track;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
@@ -56,6 +58,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Path;
 
 
 //https://developer.spotify.com/documentation/android/guides/android-authentication/#adding-the-library-to-the-project
@@ -70,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
     private String userID = "";
     Boolean isUser = false;
     RecyclerViewAdapter adapterClass = new RecyclerViewAdapter();
+    songsRecyclerViewAdapter songAdapterClass = new songsRecyclerViewAdapter();
+
 
     static SeekBar simpleProgressBar;
     static int progreso = 0;
@@ -471,6 +476,7 @@ public class MainActivity extends AppCompatActivity {
         CheckBox isPublicButton = (CheckBox)findViewById(R.id.isPublicRadioButton);
         defaultText.setText(R.string.nombre_de_la_playlist);
         isPublicButton.setChecked(false);
+        songListLayoutStart(view);
     }
 
     public void onClick_createNewPlaylist(View view) {
@@ -546,6 +552,67 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    ArrayList<com.example.playlistmanager.models.Track> playlistsSongsRequest = new ArrayList<com.example.playlistmanager.models.Track>();
+    void getPlaylistSongs(String playlist_id){
+        String playlistID = "1xKTKvIHe98vjQ0D8HUuuj";
+        SpotifyDataService service = RetrofitSpotifyClient.getRetrofitInstance().create(SpotifyDataService.class);
+        Call<GetPlaylistTracks> call = service.getPlaylistSongs(playlistID, 100, 0, "Bearer "+ TOKEN);
+        call.enqueue(new Callback<GetPlaylistTracks>() {
+            @Override
+            public void onResponse(Call<GetPlaylistTracks> call, Response<GetPlaylistTracks> response) {
+                System.out.println("prueba getPlaylistSongs :" + response.body());
+                if(response.body()!=null){
+                    System.out.println("prueba getPlaylistSongs :" +response.body().getItems().get(0).getTrack().getName());
+                    for (int i = 0; i < response.body().getItems().size() ; i++)  {
+                        if(response.body().getItems().get(i) != null){
+                            playlistsSongsRequest.add(response.body().getItems().get(i).getTrack());
+                        }
+                    }
+                } else {
+                    if(response.errorBody()!=null){
+                        try {
+                            System.out.println("prueba, error de getPlaylistSongs:" + response.errorBody().string());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            Toast.makeText(MainActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetPlaylistTracks> call, Throwable t) {
+                System.out.println("prueba, error getPlaylistSongs onFailure:" + t.getMessage());
+                Toast.makeText(MainActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    void songListLayoutStart(View view){
+        getPlaylistSongs("holi");
+        setContentView(R.layout.song_list_layout);
+        songRecylerViewStart();
+    }
+
+    public void songRecylerViewStart(){
+        // From the MainActivity, find the RecyclerView.
+        RecyclerView recyclerView
+                = findViewById(R.id.songsRecyclerView);
+
+        // Create and set the layout manager
+        // For the RecyclerView.
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(songAdapterClass);
+        updateSongRecyclerView();
+    }
+
+    public void updateSongRecyclerView(){
+        ArrayList<com.example.playlistmanager.models.Track> itemClasses = playlistsSongsRequest;
+        songAdapterClass.updateAdapter(itemClasses);
     }
 
 
