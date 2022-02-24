@@ -24,9 +24,11 @@ import com.example.playlistmanager.models.TrackSearch;
 import com.example.playlistmanager.models.User;
 import com.example.playlistmanager.models.UserPlaylistResponse;
 import com.example.playlistmanager.services.SpotifyDataService;
+import com.example.playlistmanager.recyclerViewActivity;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
+
 import com.spotify.protocol.types.PlayerState;
 import com.spotify.protocol.types.Track;
 import com.spotify.sdk.android.auth.AuthorizationClient;
@@ -58,11 +60,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
+
+
 //https://developer.spotify.com/documentation/android/guides/android-authentication/#adding-the-library-to-the-project
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String CLIENT_ID = "05684c1d384d45c2b5ef557e0dfe11b3";
+    private static final String CLIENT_ID = "7fa76e79855a45d79846fee149745c0e";
     private static final String REDIRECT_URI = "http://com.yourdomain.yourapp/callback";
     private SpotifyAppRemote mSpotifyAppRemote;
     private static final int REQUEST_CODE = 1337;
@@ -70,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     private String userID = "";
     Boolean isUser = false;
     RecyclerViewAdapter adapterClass = new RecyclerViewAdapter();
+    RecyclerViewAdapter AddPlaylistAdapterClass = new RecyclerViewAdapter();
 
     static SeekBar simpleProgressBar;
     static int progreso = 0;
@@ -219,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
     private void connected() {
         // Then we will write some more code here.
         // Play a playlist
-        mSpotifyAppRemote.getPlayerApi().play("spotify:playlist:21NfJpz1f2rFl0D1qlS5dG");
+        mSpotifyAppRemote.getPlayerApi().play("spotify:playlist:6jdrY2JQvvxbT0bjxUwp5M");
         // Subscribe to PlayerState
 
         simpleProgressBar = (SeekBar) findViewById(R.id.simpleProgressBar);
@@ -280,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void setProgressValue()  {
-        if(progreso==simpleProgressBar.getMax()){
+        if(progreso>=simpleProgressBar.getMax()){
             progreso = 0;
 
         }
@@ -320,7 +325,16 @@ public class MainActivity extends AppCompatActivity {
         SpotifyAppRemote.disconnect(mSpotifyAppRemote);
     }
 
+    public void onClick_AddSongPlayList(View v){
+        Intent i = new Intent(MainActivity.this, AddSongActivity.class);
+        startActivity(i);
 
+    }
+    public void onClick_TestRecyclerView(View v){
+        Intent i = new Intent(MainActivity.this, recyclerViewActivity.class);
+        startActivity(i);
+
+    }
 
     // Play-Stop Button actions
     public void onClick_playStop(View play_stop_view) {
@@ -479,6 +493,37 @@ public class MainActivity extends AppCompatActivity {
         newPlaylist(nameText.getText().toString(), isPublicButton.isChecked());
         onClick_closeNewPlaylist(view);
     }
+
+
+
+    public void onClick_showPlaylists(View view){
+        if(view.getBackground().equals(R.drawable.ic_newplaylist)){
+            AddPlaylistRecylerViewStart();
+            AddPlaylistUpdateRecyclerView();
+            recyclerViewActivity recycler = new recyclerViewActivity();
+            recycler.openPlaylists(view);
+        }
+
+    }
+    public void AddPlaylistRecylerViewStart(){
+        // From the MainActivity, find the RecyclerView.
+        RecyclerView recyclerView
+                = findViewById(R.id.AddToPlaylistRecycleView);
+
+        // Create and set the layout manager
+        // For the RecyclerView.
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(AddPlaylistAdapterClass);
+    }
+    public void AddPlaylistUpdateRecyclerView(){
+        ArrayList<Playlist> itemClasses = filterPlaylists();
+        AddPlaylistAdapterClass.updateAdapter(itemClasses);
+    }
+
+
+
 
     public void search(String searching){
         //searching = searching.replaceAll(" ", "%20");
