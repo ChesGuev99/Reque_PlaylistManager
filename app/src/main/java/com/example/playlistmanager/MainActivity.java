@@ -9,6 +9,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,10 +21,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.playlistmanager.UI.RecyclerViewAdapter;
 import com.example.playlistmanager.UI.songsRecyclerViewAdapter;
 import com.example.playlistmanager.models.AddSongResponse;
+import com.example.playlistmanager.models.Artist;
 import com.example.playlistmanager.models.GetPlaylistTracks;
 import com.example.playlistmanager.models.Playlist;
 import com.example.playlistmanager.models.PlaylistPost;
 import com.example.playlistmanager.models.PlaylistTracks;
+import com.example.playlistmanager.models.SimpleViewModel;
 import com.example.playlistmanager.models.TrackSearch;
 import com.example.playlistmanager.models.User;
 import com.example.playlistmanager.models.UserPlaylistResponse;
@@ -78,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerViewAdapter adapterClass = new RecyclerViewAdapter();
     RecyclerViewAdapter AddPlaylistAdapterClass = new RecyclerViewAdapter();
     songsRecyclerViewAdapter songAdapterClass = new songsRecyclerViewAdapter();
+    Playlist lastCreatedPlaylist;
 
 
     static SeekBar simpleProgressBar;
@@ -355,7 +360,7 @@ public class MainActivity extends AppCompatActivity {
     // showPlaylist Button actions
     public void onClick_showPlaylist(View showPlaylist_view) {
         getAllUserPlaylists();
-        addSong();
+        //addSong();
     }
     List<Playlist> userPlaylists;
     private void getAllUserPlaylists() {
@@ -417,6 +422,9 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("prueba newPlylst:" + response.body());
                 if(response.body()!=null){
                     System.out.println(response.body().getName());
+                    getAllUserPlaylists();
+                    updateRecyclerView();
+                    lastCreatedPlaylist = response.body();
                 } else {
                     if(response.errorBody()!=null){
                         try {
@@ -489,13 +497,12 @@ public class MainActivity extends AppCompatActivity {
         CheckBox isPublicButton = (CheckBox)findViewById(R.id.isPublicRadioButton);
         defaultText.setText(R.string.nombre_de_la_playlist);
         isPublicButton.setChecked(false);
-        songListLayoutStart(view);
     }
 
     public void onClick_createNewPlaylist(View view) {
         EditText nameText = (EditText)findViewById(R.id.editTextPlaylistName);
         CheckBox isPublicButton = (CheckBox)findViewById(R.id.isPublicRadioButton);
-        newPlaylist(nameText.getText().toString(), isPublicButton.isChecked());
+        newPlaylist(nameText.getEditableText().toString(), isPublicButton.isChecked());
         onClick_closeNewPlaylist(view);
     }
 
@@ -525,7 +532,7 @@ public class MainActivity extends AppCompatActivity {
         AddPlaylistAdapterClass.updateAdapter(itemClasses);
     }
 
-
+    List<com.example.playlistmanager.models.Track> searched = new ArrayList<com.example.playlistmanager.models.Track>();
     public void search(View view){
         //searching = searching.replaceAll(" ", "%20");
         EditText searching = (EditText)findViewById(R.id.editTextSearch);
@@ -538,6 +545,9 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("prueba busqueda texedit:" + searching);
                 if(response.body()!=null){
                     System.out.println("prueba busqueda :" +response.body().getItems().getItems().get(0).getName());
+                    searched = response.body().getItems().getItems();
+                    openAddSong();
+                    //songListLayoutStart(view);
                 } else {
                     if(response.errorBody()!=null){
                         try {
@@ -559,14 +569,30 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    /*public void addSong(com.example.playlistmanager.models.Track track, Playlist playlist){
+    void openAddSong(){
+        com.example.playlistmanager.models.Track track = searched.get(0);
+        ConstraintLayout addSong = (ConstraintLayout)findViewById(R.id.addSongLayout);
+        TextView artistText = (TextView)findViewById(R.id.nombreArtista);
+        StringBuilder text_two = new StringBuilder("Artists:");
+        for (Artist artist: track.getArtists()) {
+            text_two.append(" ").append(artist.name).append(",");
+        }
+        text_two.deleteCharAt(text_two.length()-1);
+        artistText.setText(text_two);
+        TextView songText = (TextView)findViewById(R.id.nombreCancion);
+        songText.setText(track.getName());
+        addSong.setVisibility(View.INVISIBLE);
+    }
+
+
+    public void addSong(com.example.playlistmanager.models.Track track, Playlist playlist){
         System.out.println("prueba track busqueda :" + track.getName());
         String trackID = "spotify:track:" + track.getId();
-        String playlistID = playlist.getId();*/
+        String playlistID = playlist.getId();
 
-    public void addSong(){
+    /*public void addSong(){
         String trackID = "spotify:track:" + "3UjtIALeg72qmJiKPWBvM3";
-        String playlistID = "1xKTKvIHe98vjQ0D8HUuuj";
+        String playlistID = "1xKTKvIHe98vjQ0D8HUuuj";*/
         SpotifyDataService service = RetrofitSpotifyClient.getRetrofitInstance().create(SpotifyDataService.class);
         Call<AddSongResponse> call = service.addSong(playlistID,trackID, "Bearer "+ TOKEN);
         call.enqueue(new Callback<AddSongResponse>() {
@@ -634,6 +660,7 @@ public class MainActivity extends AppCompatActivity {
     void songListLayoutStart(View view){
         getPlaylistSongs("holi");
         setContentView(R.layout.song_list_layout);
+
         songRecylerViewStart();
     }
 
@@ -656,5 +683,36 @@ public class MainActivity extends AppCompatActivity {
         songAdapterClass.updateAdapter(itemClasses);
     }
 
+    private List<SimpleViewModel> generateSimpleList() {
+        List<SimpleViewModel> simpleViewModelList = new ArrayList<>();
 
+        for (int i = 0; i < 100; i++) {
+            simpleViewModelList.add(new SimpleViewModel("hello"));        }
+
+        return simpleViewModelList;
+    }
+
+    /*void startRecycler(){
+        //SimpleAdapter adapter = new SimpleAdapter(generateSimpleList());
+        RecyclerView recyclerView =
+                (RecyclerView)findViewById(R.id.recyclerView2);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        //recyclerView.setAdapter(adapter);
+
+    }*/
+
+
+    public void onClick_closeAddSong(View view) {
+        ConstraintLayout addSong = (ConstraintLayout)findViewById(R.id.addSongLayout);
+        addSong.setVisibility(View.INVISIBLE);
+    }
+    public void addToPlaylist(View view) {
+        Playlist playlist = lastCreatedPlaylist;
+        if(lastCreatedPlaylist != null){
+            playlist = userPlaylists.get(0);
+        }
+        addSong(searched.get(0),playlist);
+    }
 }
