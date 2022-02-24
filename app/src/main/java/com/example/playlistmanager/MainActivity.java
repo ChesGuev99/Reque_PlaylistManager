@@ -148,27 +148,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateRecyclerView(){
+        ArrayList<Playlist> itemClasses = filterPlaylists();
+        adapterClass.updateAdapter(itemClasses);
+    }
 
-        ArrayList<Playlist> itemClasses = new ArrayList<Playlist>();
+    public ArrayList<Playlist> filterPlaylists(){
+        ArrayList<Playlist> filteredPlaylists = new ArrayList<Playlist>();
         for (Playlist playlist: userPlaylists) {
             System.out.println("prueba playlistRecycler: " + playlist.getName());
             if (playlist.getOwner().getId() != null){
                 if(playlist.getOwner().getId().equals(userID)){
-                    itemClasses.add(playlist);
+                    filteredPlaylists.add(playlist);
                 }
                 else{
                     if (playlist.getCollaborative() != null) {
                         if (playlist.getCollaborative()) {
-                            itemClasses.add(playlist);
+                            filteredPlaylists.add(playlist);
                         }
                     }
                 }
             }
         }
-        adapterClass.updateAdapter(itemClasses);
-
+        return filteredPlaylists;
     }
-
 
 
     private Boolean isPaused = false;
