@@ -2,12 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mainLayout"
+    android:id="@+id/sonListLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#5B8A86"
-    android:onClick="onClick_newPlaylist"
-    tools:context=".MainActivity">
+    android:background="#5B8A86">
 
     <ImageView
         android:id="@+id/ImageViewPlayButton"
@@ -24,18 +22,18 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/back"
         android:layout_width="52dp"
         android:layout_height="49dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
-        android:contentDescription="@+string/New Playlist Button"
+        android:contentDescription="@+string/Previous content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_back" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/songsRecyclerView"
         android:layout_width="411dp"
         android:layout_height="578dp"
         android:layout_marginTop="15dp"
@@ -45,7 +43,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/back"
         app:layout_constraintVertical_bias="0.0" />
 
     <SeekBar
@@ -70,7 +68,7 @@
         android:textSize="50sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.567"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toEndOf="@+id/back"
         app:layout_constraintTop_toTopOf="parent" />
 
 
